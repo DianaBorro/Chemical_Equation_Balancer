@@ -2,7 +2,12 @@ import { useState } from 'react'
 import reactLogo from './assets/react.svg'
 import viteLogo from '/vite.svg'
 import './App.css'
-import { numberOfAtoms, equation1 } from './chemistryUtils.ts';
+import {
+  // numberOfAtoms,
+  equation1,
+  // balancedCoefficients,
+  linearAlgebraSolution,
+} from './chemistryUtils.ts';
 
 function App() {
   const [count, setCount] = useState(0);
@@ -21,7 +26,14 @@ function App() {
       <div className="card">
         <button
           onClick={() => {
-            console.log('Hi, welcome to Willis', numberOfAtoms(equation1));
+            console.log(
+              'Hi, welcome to Willis',
+              linearAlgebraSolution(equation1)
+            );
+            // console.log(
+            //   'This is balanced equation',
+            //   balancedCoefficients(equation1)
+            // );
 
             setCount((count) => count + 1);
           }}
