@@ -15,7 +15,6 @@ export const equation1: ParsedEquation = {
   reactants: [
     [{ element: 'Fe', subscript: 1, coefficient: 1 }],
     [{ element: 'O', subscript: 2, coefficient: 1 }],
-    [{ element: 'Fe', subscript: 10, coefficient: 3 }],
   ],
   products: [
     [
@@ -26,20 +25,118 @@ export const equation1: ParsedEquation = {
 };
 
 export const linearAlgebraSolution = (parsedEquation: ParsedEquation) => {
-  let rrefArray = [];
-  for (let i = 0; i < parsedEquation.reactants.length; i++) {
-    if (
-      parsedEquation.reactants[i][0].element === parsedEquation.allElements[0]
-    ) {
-      rrefArray.push(
-        parsedEquation.reactants[i][0].subscript *
-          parsedEquation.reactants[i][0].coefficient
+  let arrayToRref: number[][] = [];
+  for (let i = 0; i < parsedEquation.allElements.length; i++) {
+    arrayToRref.push([]);
+  }
+
+  for (let j = 0; j < parsedEquation.allElements.length; j++) {
+    for (let i = 0; i < parsedEquation.reactants.length; i++) {
+      if (
+        parsedEquation.reactants[i][0].element === parsedEquation.allElements[j]
+      ) {
+        arrayToRref[j].push(
+          parsedEquation.reactants[i][0].subscript *
+            parsedEquation.reactants[i][0].coefficient
+        );
+      } else arrayToRref[j].push(0);
+    }
+
+    // for (let i = 0; i < parsedEquation.products.length; i++) {
+    //   if (
+    //     parsedEquation.products[i][0].element === parsedEquation.allElements[j]
+    //   ) {
+    //     rrefArray[j].push(
+    //       parsedEquation.products[i][0].subscript *
+    //         parsedEquation.products[i][0].coefficient
+    //     );
+    //   } else rrefArray[j].push(0);
+    // }
+
+    for (let i = 0; i < parsedEquation.products.length; i++) {
+      const productElement = parsedEquation.products[i].find(
+        (product) => product.element === parsedEquation.allElements[j]
       );
+
+      if (productElement) {
+        arrayToRref[j].push(
+          productElement.subscript * productElement.coefficient
+        );
+      } else {
+        arrayToRref[j].push(0);
+      }
     }
   }
 
-  return rrefArray;
+  let rrefedArray;
+  for (let i = 0; i < parsedEquation.allElements.length - 1; i++) {
+    rrefedArray = rref([arrayToRref[i], arrayToRref[i + 1]]);
+  }
+  // const rrefedArray = rref([arrayToRref[0], arrayToRref[1]]);
+  let balancedEquation: ParsedEquation = {
+    allElements: [],
+    reactants: [],
+    products: [],
+  };
+  for (let i = 0; i < parsedEquation.allElements.length; i++) {
+    console.log('hiiiiiii', rrefedArray[i][rrefedArray.length]);
+
+    balancedEquation = {
+      allElements: ['Fe', 'O'],
+      reactants: [
+        [
+          {
+            element: 'Fe',
+            subscript: 1,
+            coefficient: rrefedArray[0][rrefedArray.length],
+          },
+        ],
+        [
+          {
+            element: 'O',
+            subscript: 2,
+            coefficient: rrefedArray[1][rrefedArray.length],
+          },
+        ],
+      ],
+      products: [
+        [
+          {
+            element: 'Fe',
+            subscript: 2,
+            coefficient: 1,
+          },
+          {
+            element: 'O',
+            subscript: 3,
+            coefficient: 1,
+          },
+        ],
+      ],
+    };
+  }
+
+  console.log(
+    `the result is`,
+    `${balancedEquation.reactants[0][0].coefficient}`,
+    `${balancedEquation.reactants[0][0].element}`,
+    `${balancedEquation.reactants[0][0].subscript} +`,
+    `${balancedEquation.reactants[1][0].coefficient}`,
+    `${balancedEquation.reactants[1][0].element}`,
+    `${balancedEquation.reactants[1][0].subscript} =>`,
+    `${balancedEquation.products[0][0].coefficient} `,
+    `${balancedEquation.products[0][0].element}`,
+    `${balancedEquation.products[0][0].subscript}`,
+    `${balancedEquation.products[0][1].element}`,
+    `${balancedEquation.products[0][1].subscript}`
+  );
+
+  return balancedEquation;
 };
+
+// export const balancedEquation = (rrefedArray: Array<[]>) => {
+//   const hi = rrefedArray.length - 1;
+// };
 
 /*
 
