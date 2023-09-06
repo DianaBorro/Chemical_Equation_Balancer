@@ -79,8 +79,6 @@ export const linearAlgebraSolution = (parsedEquation: ParsedEquation) => {
     products: [],
   };
   for (let i = 0; i < parsedEquation.allElements.length; i++) {
-    console.log('hiiiiiii', rrefedArray[i][rrefedArray.length]);
-
     balancedEquation = {
       allElements: ['Fe', 'O'],
       reactants: [
