@@ -24,6 +24,23 @@ export const equation1: ParsedEquation = {
   ],
 };
 
+export const putTogetherEquationToBalance = (
+  coefficient: number,
+  element: string,
+  subscript: number
+) => {
+  const balancedEquation: ParsedEquation = {
+    allElements: [],
+    reactants: [
+      [{ element: element, subscript: subscript, coefficient: coefficient }],
+    ],
+    products: [],
+  };
+};
+
+
+
+
 export const linearAlgebraSolution = (parsedEquation: ParsedEquation) => {
   let arrayToRref: number[][] = [];
   for (let i = 0; i < parsedEquation.allElements.length; i++) {
